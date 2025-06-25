@@ -98,7 +98,7 @@
 
 
 
-                    {{-- @hasrole('admin') --}}
+                    @hasrole('admin')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.users.index') }}">
                                 <i class="bi bi-people"></i> Users
@@ -116,7 +116,7 @@
                                 <i class="bi bi-gear"></i> Admin
                             </a>
                         </li>
-                    {{-- @endhasrole --}}
+                    @endhasrole
                 </ul>
 
                 <ul class="navbar-nav">
