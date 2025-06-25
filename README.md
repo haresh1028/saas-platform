@@ -36,3 +36,11 @@ php artisan key:generate
 php artisan migrate --seed
 npm install && npm run dev
 php artisan serve
+
+## URL
+http://127.0.0.1:8000/admin/dashboard
+http://127.0.0.1:8000/admin/users
+http://127.0.0.1:8000/admin/roles
+http://127.0.0.1:8000/admin/audit-logs
+http://127.0.0.1:8000/subscription/plans
+http://127.0.0.1:8000/projects
