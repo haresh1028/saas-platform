@@ -78,11 +78,11 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.dashboard') }}">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
-                    </li>
+                    </li> --}}
                     @if (Route::has('projects.index'))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('projects.index') }}">

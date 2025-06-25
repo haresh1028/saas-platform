@@ -9,15 +9,13 @@ use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
-    public function __construct(
-        private SubscriptionService $subscriptionService
-    ) {}
+    public function __construct(private SubscriptionService $subscriptionService) {}
 
     public function plans()
     {
         $plans = Plan::where('is_active', true)->with('features')->get();
         $currentPlan = auth()->user()->activeSubscription?->plan;
-        
+
         return view('subscription.plans', compact('plans', 'currentPlan'));
     }
 
@@ -33,15 +31,11 @@ class SubscriptionController extends Controller
                 'transaction_id' => 'fake_' . uniqid(),
             ];
 
-            $subscription = $this->subscriptionService->subscribe(
-                auth()->user(),
-                $plan,
-                $paymentData
-            );
+            $subscription = $this->subscriptionService->subscribe(auth()->user(), $plan, $paymentData);
 
-            return redirect()->route('dashboard')
+            return redirect()
+                ->route('admin.dashboard')
                 ->with('success', "Successfully subscribed to {$plan->name} plan!");
-
         } catch (\Exception $e) {
             return back()->with('error', 'Subscription failed. Please try again.');
         }
@@ -50,8 +44,7 @@ class SubscriptionController extends Controller
     public function cancel()
     {
         $this->subscriptionService->cancelActiveSubscription(auth()->user());
-        
-        return redirect()->route('subscription.plans')
-            ->with('success', 'Subscription cancelled successfully.');
+
+        return redirect()->route('subscription.plans')->with('success', 'Subscription cancelled successfully.');
     }
 }

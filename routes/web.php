@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
 
+
 Route::get('/', fn () => view('welcome'));
 
 // Authenticated & verified user routes
@@ -50,10 +51,13 @@ Route::prefix('admin')
         Route::resource('users', UserController::class);
 
         // Roles
-        Route::resource('roles', RoleController::class);
+        // Route::resource('roles', RoleController::class);
 
         // Permissions
-        Route::resource('permissions', PermissionController::class);
+        // Route::resource('permissions', PermissionController::class);
+
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
     });
 
 require __DIR__ . '/auth.php';
