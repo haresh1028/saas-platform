@@ -8,9 +8,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\AuditLogController;
 
 
-Route::get('/', fn () => view('welcome'));
+Route::get('/', fn() => view('welcome'));
 
 // Authenticated & verified user routes
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -20,11 +21,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Subscription
-    Route::prefix('subscription')->name('subscription.')->group(function () {
-        Route::get('/plans', [SubscriptionController::class, 'plans'])->name('plans');
-        Route::post('/subscribe/{plan}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
-        Route::post('/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
-    });
+    Route::prefix('subscription')
+        ->name('subscription.')
+        ->group(function () {
+            Route::get('/plans', [SubscriptionController::class, 'plans'])->name('plans');
+            Route::post('/subscribe/{plan}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+            Route::post('/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
+        });
 
     // Projects
     Route::middleware('check.project.limit')->group(function () {
@@ -33,7 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::resource('projects', ProjectController::class)->except(['create', 'store']);
-    
+
     Route::post('/projects/{project}/assign-team', [ProjectController::class, 'assignTeamMember'])
         ->name('projects.assign-team')
         ->middleware('can:team_assignment');
@@ -51,13 +54,13 @@ Route::prefix('admin')
         Route::resource('users', UserController::class);
 
         // Roles
-        // Route::resource('roles', RoleController::class);
+        Route::resource('roles', RoleController::class);
 
         // Permissions
-        // Route::resource('permissions', PermissionController::class);
+        Route::resource('permissions', PermissionController::class);
 
-    Route::resource('roles', RoleController::class);
-    Route::resource('permissions', PermissionController::class);
+        // auditLog
+        Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
     });
 
 require __DIR__ . '/auth.php';

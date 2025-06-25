@@ -112,6 +112,13 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.audit-logs.index') }}">
+                                <i class="bi bi-clock-history"></i> Audit Logs
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.dashboard') }}">
                                 <i class="bi bi-gear"></i> Admin
                             </a>
