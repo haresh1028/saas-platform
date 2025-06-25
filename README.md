@@ -31,8 +31,15 @@ A SaaS-based project management platform built with Laravel 10. This app include
 git clone https://github.com/haresh1028/saas-platform.git
 cd saas-platform
 composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
 npm install && npm run dev
 php artisan serve
+
+## Database
+saas_db.sql (located main folder)
+## URL
+http://127.0.0.1:8000/admin/dashboard
+http://127.0.0.1:8000/admin/users
+http://127.0.0.1:8000/admin/roles
+http://127.0.0.1:8000/admin/audit-logs
+http://127.0.0.1:8000/subscription/plans
+http://127.0.0.1:8000/projects
