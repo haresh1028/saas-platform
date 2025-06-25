@@ -36,6 +36,7 @@ php artisan serve
 
 ## Database
 saas_db.sql (located main folder)
+postman_collection.json (located main folder)
 
 ## Email sent ##
 set IMAP in .env
