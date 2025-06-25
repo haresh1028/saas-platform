@@ -39,7 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/projects/{project}/assign-team', [ProjectController::class, 'assignTeamMember'])
         ->name('projects.assign-team')
-        ->middleware('can:team_assignment');
+        ->middleware('permission:project.assign-team');
 });
 
 // Admin-only routes

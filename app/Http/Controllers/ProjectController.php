@@ -66,7 +66,10 @@ class ProjectController extends Controller
 
     public function assignTeamMember(Request $request, Project $project)
     {
-        $this->authorize('update', $project);
+        if (!auth()->user()->can('project.assign-team')) {
+    abort(403);
+}
+
         
         if (!auth()->user()->activeSubscription?->plan->can_assign_teams) {
             return back()->with('error', 'Team assignment requires a higher subscription plan.');
