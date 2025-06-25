@@ -5,18 +5,19 @@
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900">My Projects</h1>
         
-        @if($canCreateProject)
-            <a href="{{ route('projects.create') }}" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
-                Create New Project
+        {{-- @if($canCreateProject) --}}
+            <a href="{{ route('projects.create') }}" class="btn btn-primary">
+                <i class="bi bi-check-circle"></i> Create New Project
             </a>
-        @else
+            
+        {{-- @else
             <div class="text-right">
                 <p class="text-red-600 text-sm mb-2">Project limit reached</p>
                 <a href="{{ route('subscription.plans') }}" class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200">
                     Upgrade Plan
                 </a>
             </div>
-        @endif
+        @endif --}}
     </div>
 
     @if(session('success'))

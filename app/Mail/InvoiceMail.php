@@ -13,14 +13,12 @@ class InvoiceMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(
-        public Subscription $subscription
-    ) {}
+    public function __construct(public Subscription $subscription) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Subscription Invoice',
+            subject: 'Your Subscription Invoice'
         );
     }
 
@@ -28,6 +26,13 @@ class InvoiceMail extends Mailable
     {
         return new Content(
             view: 'emails.invoice',
+            with: ['subscription' => $this->subscription]
         );
+    }
+
+    // Optional: if you have any PDF or attachments
+    public function attachments(): array
+    {
+        return [];
     }
 }

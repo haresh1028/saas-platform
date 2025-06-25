@@ -7,6 +7,9 @@ use App\Models\Plan;
 use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoiceMail;
+
 class SubscriptionController extends Controller
 {
     public function __construct(private SubscriptionService $subscriptionService) {}
@@ -33,10 +36,14 @@ class SubscriptionController extends Controller
 
             $subscription = $this->subscriptionService->subscribe(auth()->user(), $plan, $paymentData);
 
+            // ✅ Send invoice email
+            Mail::to(auth()->user()->email)->queue(new InvoiceMail($subscription));
+
             return redirect()
                 ->route('admin.dashboard')
                 ->with('success', "Successfully subscribed to {$plan->name} plan!");
         } catch (\Exception $e) {
+            report($e);
             return back()->with('error', 'Subscription failed. Please try again.');
         }
     }
