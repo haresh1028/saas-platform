@@ -9,66 +9,51 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn () => view('welcome'));
 
+// Authenticated & verified user routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard');
-    // })->name('dashboard');
-
-    // pofile routes
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-
-    // Subscription routes
+    // Subscription
     Route::prefix('subscription')->name('subscription.')->group(function () {
         Route::get('/plans', [SubscriptionController::class, 'plans'])->name('plans');
         Route::post('/subscribe/{plan}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
         Route::post('/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
     });
 
-    // Project routes
-    Route::resource('projects', ProjectController::class);
+    // Projects
+    Route::middleware('check.project.limit')->group(function () {
+        Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+        Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    });
+
+    Route::resource('projects', ProjectController::class)->except(['create', 'store']);
+    
     Route::post('/projects/{project}/assign-team', [ProjectController::class, 'assignTeamMember'])
         ->name('projects.assign-team')
         ->middleware('can:team_assignment');
-    
-    // Apply project limit middleware to create routes
-    Route::get('/projects/create', [ProjectController::class, 'create'])
-        ->name('projects.create')
-        ->middleware('check.project.limit');
-    
-    Route::post('/projects', [ProjectController::class, 'store'])
-        ->name('projects.store')
-        ->middleware('check.project.limit');
 });
 
-// Admin routes
-// middleware(['auth', 'role:admin'])->
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/users', [DashboardController::class, 'users'])->name('users');
+// Admin-only routes
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('users', UserController::class);
-    //  Route::resource('roles', RoleController::class);
-    
-    Route::resource('permissions', PermissionController::class);
+        // Users
+        Route::resource('users', UserController::class);
 
-});
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('roles/create', [RoleController::class, 'create'])->name('roles.create');
-    Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
-    Route::get('roles/{user}', [RoleController::class, 'show'])->name('roles.show'); // 👈 add this
-    Route::get('roles/{user}/edit', [RoleController::class, 'edit'])->name('roles.edit');
-    Route::put('roles/{user}', [RoleController::class, 'update'])->name('roles.update');
-    Route::delete('roles/{user}', [RoleController::class, 'destroy'])->name('roles.destroy');
-});
+        // Roles
+        Route::resource('roles', RoleController::class);
 
+        // Permissions
+        Route::resource('permissions', PermissionController::class);
+    });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
