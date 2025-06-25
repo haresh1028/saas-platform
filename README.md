@@ -36,6 +36,10 @@ php artisan serve
 
 ## Database
 saas_db.sql (located main folder)
+
+## Email sent ##
+set IMAP in .env
+run this cmd - php artisan queue:work
 ## URL
 http://127.0.0.1:8000/admin/dashboard
 http://127.0.0.1:8000/admin/users
