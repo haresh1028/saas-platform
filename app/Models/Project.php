@@ -9,14 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'description',
-        'user_id',
-        'status',
-        'start_date',
-        'end_date',
-    ];
+    protected $fillable = ['name', 'description', 'user_id', 'status', 'start_date', 'end_date'];
 
     protected function casts(): array
     {
@@ -34,5 +27,10 @@ class Project extends Model
     public function teamMembers()
     {
         return $this->belongsToMany(User::class, 'project_team_members');
+    }
+
+    public function team()
+    {
+        return $this->belongsToMany(User::class)->withPivot('role')->withTimestamps();
     }
 }
